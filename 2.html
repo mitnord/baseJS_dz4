@@ -51,6 +51,7 @@
 -->
   <script>
     "use strict";
+
     function PostES5(author, text, editTime) {
       this.author = author;
       this.text = text;
@@ -58,8 +59,9 @@
     }
 
     PostES5.prototype = PostES5;
-    PostES5.prototype.edit = function (newText) {
-      this.text = newText;
+    PostES5.prototype.edit = function () {
+      this.text = this.text + '. Очень!';
+      this.editTime = new Date();
     }
 
     function AttachedPostES5(author, text, editTime, highlighted = false) {
@@ -70,18 +72,54 @@
     AttachedPostES5.prototype.constructor = AttachedPostES5
     AttachedPostES5.prototype.makeTextHighlighted = function () {
       this.highlighted = true;
+      this.edit();
     }
 
-    const usual_post = new PostES5("Дима", "Диме не очень нравится как устроены классы в ES5", new Date());
+    const usual_post = new PostES5("Дима", "Диме не нравится как устроены классы в ES5");
     console.log(`${usual_post.editTime} ${usual_post.text}`);
-    setTimeout(usual_post.edit("Диме в восторге от классов в ES6"), 10000);
+    usual_post.edit();
     console.log(`${usual_post.editTime} ${usual_post.text}`);
 
-    const att_post = new AttachedPostES5("Петя", "Пете не очень нравится как устроены классы в ES5", new Date());
-    att_post.highlighted(1);
+    const att_post = new AttachedPostES5("Петя", "Пете не нравится как устроены классы в ES5");
     console.log(`${att_post.editTime} ${att_post.text} ${att_post.highlighted}`);
-    usual_post.edit("Петя в восторге от классов в ES6");
+    att_post.makeTextHighlighted();
     console.log(`${att_post.editTime} ${att_post.text} ${att_post.highlighted}`);
+
+
+    class PostES6 {
+      constructor(author, text, editTime) {
+        this.author = author;
+        this.text = text;
+        this.editTime = editTime;
+      }
+
+      edit() {
+        this.text = this.text + '. Очень!';
+        this.editTime = new Date();
+      }
+    }
+
+    class AttachedPostES6 extends PostES6 {
+      constructor(author, text, editTime, highlighted = false) {
+        super();
+        this.highlighted = highlighted;
+      }
+
+      makeTextHighlighted() {
+        this.highlighted = true;
+        this.edit();
+      }
+    }
+
+    const usual_post_es6 = new PostES5("Дима", "Диме нравится как устроены классы в ES6");
+    console.log(`${usual_post_es6.editTime} ${usual_post_es6.text}`);
+    usual_post_es6.edit();
+    console.log(`${usual_post_es6.editTime} ${usual_post_es6.text}`);
+
+    const att_post_es6 = new AttachedPostES5("Петя", "Пете нравится как устроены классы в ES6");
+    console.log(`${att_post_es6.editTime} ${att_post_es6.text} ${att_post_es6.highlighted}`);
+    att_post_es6.makeTextHighlighted();
+    console.log(`${att_post_es6.editTime} ${att_post_es6.text} ${att_post_es6.highlighted}`);
 
   </script>
 </body>
