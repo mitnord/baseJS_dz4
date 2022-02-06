@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Homework</title>
 </head>
+
 <body>
-<!--
+  <!--
 Обязательное задание.
 
 Необходимо данное задание выполнить в es5 стиле и в es6 стиле.
@@ -47,10 +49,41 @@
 что-нибудь пропустить.
 4. Если непонятно условие - задайте вопрос.
 -->
-<script>
-  "use strict";
+  <script>
+    "use strict";
+    function PostES5(author, text, editTime) {
+      this.author = author;
+      this.text = text;
+      this.editTime = editTime;
+    }
 
-  // Здесь пишем решение, данный комментарий необходимо стереть.
-</script>
+    PostES5.prototype = PostES5;
+    PostES5.prototype.edit = function (newText) {
+      this.text = newText;
+    }
+
+    function AttachedPostES5(author, text, editTime, highlighted = false) {
+      PostES5.call(this, author, text, editTime);
+      this.highlighted = highlighted;
+    }
+    AttachedPostES5.prototype = Object.create(PostES5.prototype);
+    AttachedPostES5.prototype.constructor = AttachedPostES5
+    AttachedPostES5.prototype.makeTextHighlighted = function () {
+      this.highlighted = true;
+    }
+
+    const usual_post = new PostES5("Дима", "Диме не очень нравится как устроены классы в ES5", new Date());
+    console.log(`${usual_post.editTime} ${usual_post.text}`);
+    setTimeout(usual_post.edit("Диме в восторге от классов в ES6"), 10000);
+    console.log(`${usual_post.editTime} ${usual_post.text}`);
+
+    const att_post = new AttachedPostES5("Петя", "Пете не очень нравится как устроены классы в ES5", new Date());
+    att_post.highlighted(1);
+    console.log(`${att_post.editTime} ${att_post.text} ${att_post.highlighted}`);
+    usual_post.edit("Петя в восторге от классов в ES6");
+    console.log(`${att_post.editTime} ${att_post.text} ${att_post.highlighted}`);
+
+  </script>
 </body>
+
 </html>
